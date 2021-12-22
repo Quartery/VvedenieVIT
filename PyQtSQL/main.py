@@ -248,14 +248,11 @@ class Window(QWidget):
                 row.append(None)
         if row[0] == '-' or row[0] == 'н' or row[0] == 'в':
             if row[2] in work_time:
-                try:
-                    self.cursor.execute("update time_table set pos = '" + row[0] + "' where id = " + row[3] + ";")
-                    self.cursor.execute("update time_table set subject = '" + row[1] + "' where id = " + row[3] + "")
-                    self.cursor.execute(
-                        "update time_table set start_time = '" + row[2] + "' where id = " + row[3] + ";")
-                    self.conn.commit()
-                except:
-                    QMessageBox.about(self, "Error", "Enter all fields")
+                self.cursor.execute("update time_table set pos = '" + row[0] + "' where id = " + row[3] + ";")
+                self.cursor.execute("update time_table set subject = '" + row[1] + "' where id = " + row[3] + "")
+                self.cursor.execute(
+                    "update time_table set start_time = '" + row[2] + "' where id = " + row[3] + ";")
+                self.conn.commit()
             else:
                 QMessageBox.about(self, "Error", "Введите стандартизированое время")
         else:
@@ -269,11 +266,8 @@ class Window(QWidget):
                 row.append(a.item(rown, i).text())
             except:
                 row.append(None)
-            try:
-                self.cursor.execute("update teacher set full_name = '" + row[0] + "' where id = " + row[2] + ";")
-                self.conn.commit()
-            except:
-                QMessageBox.about(self, "Error", "Enter all fields")
+            self.cursor.execute("update teacher set full_name = '" + row[0] + "' where id = " + row[2] + ";")
+            self.conn.commit()
 
     def _del_from_time_table(self, rown, a, day):
         row = list()
@@ -282,11 +276,8 @@ class Window(QWidget):
                 row.append(a.item(rown, i).text())
             except:
                 row.append(None)
-        try:
-            self.cursor.execute("delete from time_table where id = " + row[3] + ";")
-            self.conn.commit()
-        except:
-            QMessageBox.about(self, "Error", "Enter all fields")
+        self.cursor.execute("delete from time_table where id = " + row[3] + ";")
+        self.conn.commit()
         self._update_day_table(a, day)
 
     def _del_from_teacher(self, rown, a):
@@ -296,11 +287,8 @@ class Window(QWidget):
                 row.append(a.item(rown, i).text())
             except:
                 row.append(None)
-        try:
-            self.cursor.execute("delete from teacher where id = " + row[2] + ";")
-            self.conn.commit()
-        except:
-            QMessageBox.about(self, "Error", "Enter all fields")
+        self.cursor.execute("delete from teacher where id = " + row[2] + ";")
+        self.conn.commit()
         self._update_teacher_table()
 
     def _del_from_subject(self, rown, a):
@@ -344,14 +332,10 @@ class Window(QWidget):
         if row[1] in A and row[1] != '':
             if row[0] == '-' or row[0] == 'н' or row[0] == 'в':
                 if row[2] in work_time:
-                    try:
-                        self.cursor.execute(
-                            "insert into time_table(day, pos, subject, start_time) values('" + day + "', '" + row[
-                                0] + "', '" + row[
-                                1] + "', '" + row[2] + "');")
-                        self.conn.commit()
-                    except:
-                        QMessageBox.about(self, "Error", "Enter all fields")
+                    self.cursor.execute(
+                        "insert into time_table(day, pos, subject, start_time) values('" + day + "', '" + row[
+                            0] + "', '" + row[1] + "', '" + row[2] + "');")
+                    self.conn.commit()
                     self._update_day_table(a, day)
                 else:
                     QMessageBox.about(self, "Error", "Введите стандартизированое время")
@@ -374,12 +358,9 @@ class Window(QWidget):
             except:
                 row.append(None)
         if row[1] in A:
-            try:
-                self.cursor.execute(
-                    "insert into teacher(full_name, subject) values('" + row[0] + "', '" + row[1] + "');")
-                self.conn.commit()
-            except:
-                QMessageBox.about(self, "Error", "Enter all fields")
+            self.cursor.execute(
+                "insert into teacher(full_name, subject) values('" + row[0] + "', '" + row[1] + "');")
+            self.conn.commit()
             self._update_teacher_table()
         else:
             QMessageBox.about(self, "Error", "Такого предмета нет в БД")
